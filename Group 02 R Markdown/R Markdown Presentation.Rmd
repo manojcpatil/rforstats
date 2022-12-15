@@ -1,0 +1,327 @@
+---
+title: <span style="color:purple">R Markdown Presentation
+author: <span style="color:blue">__|| 2211 Vishal || 2213 Tushar || 2224 Mayur || 2242 Mithilesh ||__ 
+date: <span style="color:red">*11-Dec-2022(Sunday)*
+output: "slidy_presentation"
+fig_width: 3
+fig_height: 4
+---
+
+<span style="color:magenta"> Introduction 
+-------------------------------------------------------------------------
+
+R Markdown provides a unified authoring framework for data science, combining your code, its results, and your prose commentary.
+R Markdown documents are fully reproducible and support dozens
+of output formats, like PDFs, Word files, slideshows, and more.
+ 
+### <span style="color:blue"> R Markdown files are designed to be used in three ways:
+
+- For communicating to decision makers, who want to focus on
+the conclusions, not the code behind the analysis.
+
+- For collaborating with other data scientists (including future
+you!), who are interested in both your conclusions, and how
+you reached them (i.e., the code).
+
+- As an environment in which to do data science, as a modern day
+lab notebook where you can capture not only what you did, but
+also what you were thinking.
+
+- *R Markdown Cheat Sheet:* available in the *RStudio IDE* under
+__Help → Cheatsheets → R Markdown Cheat Sheet__
+
+- *R Markdown Reference Guide:* available in the RStudio IDE
+under __Help → Cheatsheets → R Markdown Reference Guide__
+
+-------------------------------------------------------------------------
+
+# To colour document title and other things mentioned in the title we use the following commands i.e.  
+-------------------------------------------------------------------------
+### <span style="color:purple">__< span style="color:purple" >__
+
+title: `<span style="color:purple">` R Markdown Presentation
+
+author: `<span style="color:blue"> `__|| 2211 Vishal || 2213 Tushar || 2224 Mayur || 2242 Mithilesh ||__ 
+
+date: `<span style="color:red">` *11-Dec-2022(Sunday)*
+
+output: slidy_presentation
+
+fig_width: 3 (to adjust graph width)
+
+fig_height: 4 (to adjust graph heigth)
+
+-------------------------------------------------------------------------
+
+
+## <span style="color:maroon">R Markdown document 
+-------------------------------------------------------------------------
+![markdown document](C:\Users\Sarvadnya\Pictures\Screenshots\document.png){width=50%}
+
+## Documents
+
+- pdf_document makes a PDF with LaTeX (an open source docu‐
+ment layout system), which you’ll need to install. RStudio will
+prompt you if you don’t already have it.
+
+- word_document for Microsoft Word documents (.docx).
+
+- odt_document for OpenDocument Text documents (.odt).
+
+- rtf_document for Rich Text Format (.rtf) documents.
+
+- md_document for a Markdown document. This isn’t typically
+useful by itself, but you might use it if, for example, your corpo‐
+rate CMS or lab wiki uses Markdown.
+
+- github_document is a tailored version of md_document designed
+for sharing on GitHub.
+
+
+
+## <span style="color:purple">R Markdown Presentation
+
+![markdown presentation](C:\Users\Sarvadnya\Pictures\Screenshots\presentation.png){width=50%}
+
+
+## Presentation
+R Markdown comes with three presentations formats built in:
+
+- ioslides_presentation :- HTML presentation with ioslides.
+
+- slidy_presentation :-  HTML presentation with W3C Slidy.
+
+- beamer_presentation  :- PDF presentation with LaTeX Beamer.
+
+- Two other popular formats are provided by packages:
+
+- revealjs::revealjs_presentation
+
+HTML presentation with reveal.js. Requires the revealjs pack‐
+age.
+
+- rmdshower :- Provides a wrapper around the shower presentation engine
+
+- rmdshower
+
+Provides a wrapper around the shower presentation engine.
+
+
+## <span style="color:blue">R Markdown shiny
+
+%![markdown shiny](C:\Users\Sarvadnya\Pictures\Screenshots\shiny.png){width=50%}
+
+## Shiny
+To call Shiny code from an R Markdown document, add runtime:
+shiny to the header:
+
+title: "Shiny Web App"
+output: html_document
+runtime: shiny
+
+Then you can use the “input” functions to add interactive compo‐
+nents to the document:input code$\rightarrow$
+
+- >library(shiny)
+
+- >textInput("name", "What is your name?")
+
+- >numericInput("age", "How old are you?", NA, min = 0, max = 150)
+
+You can then refer to the values with *input$name and input$age*,
+and the code that uses them will be automatically rerun whenever
+they change. *Output* $\rightarrow$
+
+![markdown ](C:\Users\Sarvadnya\Pictures\Screenshots\what is.png){width=50%}
+
+
+## <span style="color:red">Templets In R Markdown
+
+![markdown templets](C:\Users\Sarvadnya\Pictures\Screenshots\Templets.png){width=50%}
+
+
+## Dashboards
+
+- Each level 1 header (#) begins a new page in the dashboard.
+
+- Each level 2 header (##) begins a new column.
+
+- Each level 3 header (###) begins a new row.
+
+
+##
+- For example, you can produce this dashboard:
+
+![markdown flexboard](C:\Users\Sarvadnya\Pictures\Screenshots\flexdashboard.png){width=60%}
+
+---------------------------------------------------------------------------
+
+
+##
+### Text Formatting with Markdown
+
+#### Text formatting
+
+To italic or bold or code or superscript the given text we use
+
+-  `_italic_` or `*italic*` :- text under stars or underscore as "_italic_"
+
+
+- `**bold**` or `__bold__`   :- text under double stars or double underscore as "**Bold**"
+
+
+- ` code` :- to write text in a code format or font as "`code`"
+
+
+- `superscript^2^` and `subscript~2~`  :- to write text as "superscript^2^" and "subscript~2~"
+
+---------------------------------------------------------------------------
+
+##
+### Headings
+
+#### Headings
+
+`# 1st Level Header` As
+
+ #1st Level Header
+
+`## 2nd Level Header` As
+
+ ## 2nd Level Header 
+
+`### 3rd Level Header` As
+
+ ### 3rd Level Header
+
+------------------------------------------------------
+
+Lists
+------------------------------------------------------------
+`* Bulleted list item 1`
+
+* Bulleted list item 1
+
+`* Item 2`
+
+* Item 2
+ 
+ `* Item 2a`
+
+ * Item 2a
+
+`1. Numbered list item 1`
+
+1. Numbered list item 1
+
+`1. Item 2. The numbers are incremented automatically in
+the output.`
+
+1. Item 2. The numbers are incremented automatically in
+the output.
+----------------------------------------------------------
+
+Links and images
+------------------------------------------------------------
+* To add link to our document
+
+Example
+
+`<http://nmu.ac.in>`
+
+<http://nmu.ac.in> 
+
+OR
+
+`[KBCNMU Website](http://nmu.ac.in)`
+
+click here : [KBCNMU Website](http://nmu.ac.in)
+
+##
+* To add image to our document
+
+`![optional caption text](path/to/img.png)`
+
+Example
+
+`![R Markdown](C:\Users\Sarvadnya\Pictures\Screenshots\Screenshot (12).png) {width=50%}`
+ 
+![R Markdown](C:\Users\Sarvadnya\Pictures\Screenshots\Screenshot (12).png){width=50%}
+
+
+Tables
+------------------------------------------------------------
+First Header | Second Header
+------------ | -------------
+Content Cell | Content Cell
+Content Cell | Content Cell
+
+- this type of table we can create here by given syntax
+
+# <span style="color:orange">Code Chunks
+----------------------------------------------------------------
+### To run code inside an R Markdown document, you need to insert a chunk. There are three ways to do so:
+
+1. The keyboard shortcut Cmd/Ctrl-Alt-I
+
+2. The “Insert” button icon in the editor toolbar
+
+3. By manually typing the chunk delimiters ` ```{r} and r code``` `
+
+### Chunk Name
+
+Chunks can be given an optional name: ```{r by-name}.
+
+## <span style="color:redd">Chunk Options
+
+__knitr provides almost 60 options that you can
+use to customize your code chunks.__
+
+__The most important set of options controls if your code block is exe‐
+cuted and what results are inserted in the finished report:__
+
+- eval = FALSE prevents code from being evaluated. (And obvi‐
+ously if the code is not run, no results will be generated.)
+
+- include = FALSE runs the code, but doesn’t show the code or
+results in the final document. 
+
+- echo = FALSE prevents code, but not the results from appearing
+in the finished file. 
+
+- message = FALSE or warning = FALSE prevents messages or
+warnings from appearing in the finished file.
+
+- results = 'hide' hides printed output; fig.show = 'hide'
+hides plots.
+
+- error = TRUE causes the render to continue even if code
+returns an error. The default, error = FALSE, causes knitting to fail if
+there is a single error in the document.
+
+## <span style="color:purple">__Plot Options__
+
+```{r echo=FALSE}
+library(ggplot2)
+data(iris)
+ggplot(iris,aes(Sepal.Length, Petal.Length, colour=Species))+
+  geom_point()
+```
+
+
+
+
+
+
+
+
+## <span style="color:cyan">THANK YOU FOR WATCHING....
+#### FROM:-  <span style="color:magenta">MITHILESH | <span style="color:purple">TUSHAR | <span style="color:blue">VISHAL | <span style="color:red">MAYUR
+
+
+
+
+
+
+
+

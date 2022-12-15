@@ -1,0 +1,269 @@
+---
+title: "Parametric Tests Using R "
+author:
+- Manasi Deshmukh -2209
+- Aachal Pardeshi -2217
+- Sampada Patil -2229
+- Vedanti Savant -2234
+- Jagruti Sonawane -2237
+institute:
+  -"North Maharashtra University"
+date: "09/12/2022"
+output:
+  slidy_presentation:
+    theme: "cerulean"
+    highlight: breezedark
+---
+
+# Parametric Tests
+
+Parametric tests are *statistical significance tests* that quantify the association or independence between a quantitative variable and a categorical variable. Remember that a categorical variable is one that divides individuals into groups. However, this type of test requires certain prerequisites for its application.
+
+As mentioned above, parametric tests have a couple of assumptions that need to be met by the data:
+
+1. Normality — the sample data come from a population that approximately follows a normal distribution
+2. Homogeneity of variance — the sample data come from a population with the same variance
+3. Independence — the sample data consists of independent observations and are sampled randomly
+4. Outliers — the sample data don’t contain any extreme outliers
+
+
+# One sample t-test
+The one sample t-test is concerned with testing whether the mean of a population differs significantly from a given known or hypothesized value. Therefore, the test calculates descriptive statistics for the contrast variables together with the t-test.
+ Null hypothesis: $$ H_o: \mu= \mu_0 $$
+ Alternative hypothesis: $$ H_1: \mu \neq \mu_0 $$ or $$\mu> \mu_0$$ or $$\mu< \mu_0$$
+ 
+ *Test Statistics*:-  $\frac{x- \mu_0}{\sigma/\sqrt{n}}$
+ 
+**Example**:- Suppose that sweets are sold in packages of fixed weight of the contents. The producer of the packages is interested in testing that average weight of contents in packages in 1kg. Hence a random sample of 12 packages is drawn and their contents found(in kg) as follows: 1.05,1.01,1.04,0.98,0.96,1.01,0.97,0.99,0.98,0.95,0.97,0.95.Using above data what should he conclude about the average weight of contents in the packets?
+
+**Solution**:- To test normality of data we use Shapiro test as follows given by command, _shapiro.test(X)_
+
+```{r}
+x=c(1.05,1.01,1.04,0.98,0.96,1.01,0.97,0.99,0.98,0.95,0.97,0.95)
+shapiro.test(x)
+```
+From the output since P-value is greater than level of significance $\alpha=0.05$ we accept hypothesis of normality of data.
+Here $\mu_0=1$ hence, for testing $H_0:\mu=\mu_0=1$ aganist $H_1:\mu_1 \neq 0$ we use command _t.test()_
+```{r}
+t.test(x,mu=1)
+```
+
+**Conclusion**:-From the output since the p-value is greater than level of significance $\alpha=0.05$ *we accept null hypothesis*.The producer should coclude that the average weight of 
+contents of package may be taken as 1 kg.
+
+
+
+# T-test for two independent samples 
+Researchers use this test when the comparison is between the means of two independent populations. That is, the individuals of one of the populations are different from the individuals of the other. An example of this is a comparison between males and females.If we assume that the two sample are independent and population variance $\sigma_1^2$ and 
+
+ Null hypothesis: $$ H_o: \mu_1= \mu_2 $$
+ Alternative hypothesis: $$ H_1: \mu_1 \neq \mu_2 $$ or $$\mu_1> \mu_2$$ or $$\mu_1< \mu_2$$
+
+ *Test Statistics*:-     {$\frac{\overline x_1-\overline x_2}{\sqrt{\sigma_1^2/n_1+\sigma_2^2/n_2}}$} 
+
+**Example**:- The gain in weights (in lbs) of pigs fed on two diets A and B are given below: Test whether the two diets differ significantly regarding their effect on increase in weight.
+```{r,echo=FALSE}
+df=data.frame(DietA=c(25,32,30,34,24,14,32,24,30,31,35,25,NA,NA,NA),DietB=c(44,34,22,10,47,31,40,30,32,35,18,21,35,29,22))
+opts<-options(knitr.kable.NA="")
+knitr::kable(df)
+```
+
+
+**Solution**:- For testing $$ H_o: \mu_1= \mu_2 $$against $$ H_1: \mu_1 \neq \mu_2 $$ we use following commands.
+```{r}
+x=c(25,32,30,34,24,14,32,24,30,31,35,25)
+y=c(44,34,22,10,47,31,40,30,32,35,18,21,35,29,22)
+t.test(x,y,var.equal=T)
+```
+
+**Conclusion**:-From the output since the p-value is greater than level of significance $\alpha=0.05$ **we accept null hypothesis.**
+
+
+
+
+# Paired T-test for two samples
+This test is another alternative for contrasting two means. It mainly refers to the case in which the two populations aren’t independent. In this case, you’re dealing with populations that are related to each other. This situation occurs, for example, when experts observe a group of individuals before and after a given intervention.
+  Let $X \sim N(\mu_x,\sigma_x^2)$ and $Y \sim N(\mu_y,\sigma_y^2)$ be a random sample from bivariate normal population. Let $d=x-y$ 
+  Null hypothesis: $$ H_o: \mu_d=0$$
+ Alternative hypothesis: $$ H_1: \mu_d \neq0 $$ or $$\mu_d>0$$ or $$\mu_d<0$$
+ 
+ *Test Statistics*:-   {$\frac{\overline d}{s_d/\sqrt{n}}$}
+ 
+ 
+ **Example**A health club advertized a weight reducing program claimed that on the average participant in a program losses weight in 6 months. A person wanted to verify the claim. The club allowed him to select randomly the records of 10 participants about their weight before and after the program. The data were as follows:
+```{r,echo=FALSE}
+x=c(120,125,115,130,123,119,122,127,128,118)
+y=c(111,114,107,120,115,112,112,120,119,112)
+df=data.frame(x,y)
+knitr::kable(df,col.names = c('Weight before joining the club(in lbs)','Weight after 6 months from joining the club(in lbs)'),align ="cc")
+```
+
+Do the above data support claim of the health club? [Use 1% level of significance]
+ 
+ **Solution**: For testing $$ H_o: \mu_d=0$$ aganist $$ H_1: \mu_d \neq0 $$ 
+```{r}
+x=c(120,125,115,130,123,119,122,127,128,118)
+y=c(111,114,107,120,115,112,112,120,119,112)
+t.test(y,x,paired=T,alt="less")
+```
+
+**Conclusion**:-From the output since the p-value is less than level of significance $\alpha=0.01$ **we reject null hypothesis.**
+\ The given data support the claim of the health club that on the average, participant in the program loses weight during 6 months. 
+ 
+
+
+# The chi-square test 
+Let us assume that the observations in the population under consideration have $X \sim N(\mu,\sigma^2)$ distribution. We wish to test 
+ Null hypothesis: $$ H_o: \sigma^2= \sigma_0^2$$
+ Alternative hypothesis: $$H_1: \sigma^2 \neq \sigma_0^2 $$ or $$\sigma^2>\sigma_0^2$$ or $$\sigma^2<\sigma_0^2$$  
+ where $\sigma_0^2$ is specified value of $\sigma^2$. The population mean $\mu$ may be known or unknown.
+ 
+ *Test Statistic*:-  $\sum$$\frac{(O_i-E_i)^2}{E_i}$
+
+**Example**:- A sample 390 males was selected to find association between their occupation and occupation of their fathers.It revealed following information.
+```{r,echo=FALSE}
+data=matrix(c(33,15,15,17,18,29,16,25,25,26,38,31,19,30,16,37),ncol = 4)
+rownames(data)=c('Agricluter','Business','Service','Other')
+colnames(data)=c('Agricluter','Business','Service','Other')
+data=as.table(data)
+data
+```
+Test wheather the son's occupation is independent of father's occupation(use 5% los)
+
+**Solution**:-
+Here we want to test $H_0$: Two attributes son's occupation and fathers occupation are independent of each other against 
+$H_1$:They are associated with each other.
+```{r}
+x=c(33,18,25,19,15,29,26,30,15,16,38,16,17,25,31,37)
+m=matrix(x,byrow=T,ncol=4)
+chisq.test(m)
+```
+
+**Conclusion**:-From the output since the p-value is less than los $\alpha=0.05$ we reject null hypothesis.Hence occupation of a son may depend on occupation of father.
+ 
+
+
+# One-way ANOVA test 
+
+The one-way analysis of variance (ANOVA), also known as one-factor ANOVA, is an extension of independent two-samples t-test for comparing means in a 
+situation where there are more than two groups. In one-way ANOVA, the data is organized into several groups base on one single grouping variable 
+(also called factor variable).It takes one categorical group into consideration.
+ Null Hypothesis: All population means are equal.
+ Alternate Hypothesis: Atleast one population mean is different from other.
+```{r,warning=FALSE,error=F,message=FALSE}
+library(dplyr)
+boxplot(mtcars$disp~factor(mtcars$gear),
+        xlab = "gear", ylab = "disp")
+```
+
+The box plot shows the mean values of gear with respect of displacement. Hear categorical variable is gear on which factor function is used and continuous variable is displacement.
+```{r}
+mtcars_aov <- aov(mtcars$disp~factor(mtcars$gear))
+summary(mtcars_aov)
+```
+
+**Conclusion**:-The summary shows that the gear attribute is very significant to displacement. Also, the P value is less than 0.05, 
+so proves that gear is significant to displacement i.e related to each other and we reject the Null Hypothesis.
+
+```{r}
+TukeyHSD(mtcars_aov)
+```
+**Conclusion**:- Output shows that associated p-value is less than 0.05 .Hence gear 3 and 4 significantly different from each other.Also, p-value for  pair of gear 5-3 and 5-4 
+is greater than 0.05 i.e they are not significantly different.
+
+# Two-way ANOVA test 
+Two-way ANOVA test is used to evaluate simultaneously the effect of two grouping variables (A and B) on a response variable.It takes two categorical group into consideration.
+Null Hypothesis: All population means are equal.
+Alternate Hypothesis: Atleast one population mean is different from other.
+
+```{r}
+library(dplyr)
+boxplot(mtcars$disp~mtcars$gear, subset = (mtcars$am == 0),
+        xlab = "gear", ylab = "disp", main = "Automatic")
+boxplot(mtcars$disp~mtcars$gear, subset = (mtcars$am == 1),
+            xlab = "gear", ylab = "disp", main = "Manual")
+```
+
+The box plot shows the mean values of gear with respect to displacement. Hear categorical variables are gear and am on which factor function is used and continuous
+variable is displacement.
+Results
+We see significant results from boxplots and summaries. 
+Displacement is strongly related to Gears in cars i.e displacement is dependent on gears with p < 0.05.
+Displacement is strongly related to Gears but not related to transmission mode in cars with p 0.05 with am.
+```{r}
+mtcars_aov2 <- aov(mtcars$disp~factor(mtcars$gear) *
+                            factor(mtcars$am))
+summary(mtcars_aov2)
+```
+
+**Conclusion**:-The summary shows that the gear attribute is very significant to displacement(Three stars denoting it) and am attribute is not much significant to displacement. P-value of gear is less than 0.05, so it proves that gear is significant to displacement i.e related to each other. P-value of am is greater than 0.05, am is not significant to displacement i.e not related to each other.
+```{r}
+TukeyHSD(mtcars_aov2)
+```
+
+**Conclusion**:- Tukey test is used for pairwise comparision between different factors.Here output shows for factor am p-value >0.05 i.e factors are not significantly different 
+from each other.
+
+ 
+
+
+# Testing population proportion $P$ equal to a specified value $P_0$:
+
+The One Sample Proportion Test is used to estimate the proportion of a population. It compares the proportion to a target or reference value and also calculates a range of 
+values that is likely to include the population proportion. This is also called hypothesis of inequality.
+ 
+ Null hypothesis: $$ H_0: P= P_0$$
+ Alternative hypothesis: $$H_1: P \neq P_0 $$ or $$P>P_0$$ or $$P<P_0$$  
+ where $P_0$ is specified value of $P$.
+ 
+ *Test Statistics*:-    {$\frac{P-P_0}{\sqrt{P_0Q_0/n}}$}
+
+**Example** Suppose we want to know whether or not the proportion of residents in a certain county who support a certain law is equal to 60%. To test this, we collect the following data on a random sample:
+p0: hypothesized population proportion = 0.60
+x: residents who support law: 64
+n: sample size = 100
+
+**Solution**:- Since our sample size is greater than 30, we can use the prop.test() function to perform a one sample z-test:
+```{r}
+prop.test(x=64, n=100, p=0.60, alternative="two.sided")
+```
+
+**Conclusion**:-From the output we can see that the p-value is 0.475. Since this value is not less than α = 0.05, we fail to reject the null hypothesis. 
+We do not have sufficient evidence to say that the proportion of residents who support the law is different from 0.60.
+The 95% confidence interval for the true proportion of residents in the county that support the law is also found to be:
+95% C.I. = [0.5373, 7318]
+Since this confidence interval contains the proportion 0.60, we do not have evidence to say that the true proportion of residents who support the law is different from 0.60. 
+This matches the conclusion we came to using just the p-value of the test.
+
+
+
+# Testing equality of two population proportions $P_1=P_2$
+A two-proportion Z-test is a statistical hypothesis test used to determine whether two proportions are different from each other. While performing the test, Z-statistics is 
+computed from two independent samples and the null hypothesis is that the two proportions are equal. In other words, the two samples are coming from the same population.
+ Null hypothesis: $$ H_0: P_1= P_2$$
+ Alternative hypothesis: $$H_1: P_1 \neq P_2 $$ or $$P_1>P_2$$ or $$P_1<P_2$$  
+ where $P_0$ is specified value of $P$.
+ 
+ *Test Statistics*:-    $\frac{P_1-P_2}{\sqrt{\overline P \overline Q(1/n_1+1/n_2)}}$
+
+**Example** Assuming that the data in quine follows the normal distribution, find the 95% confidence interval estimate of the difference between the female proportion of 
+Aboriginal students and the female proportion of Non-Aboriginal students, each within their own ethnic group.
+
+**Solution**:-
+We apply the prop.test function to compute the difference in female proportions.
+```{r,warning=FALSE,error=F,message=FALSE}
+library(MASS)
+prop.test(table(quine$Eth, quine$Sex), correct=FALSE) 
+```
+
+**Conclusion**:-The 95% confidence interval estimate of the difference between the female proportion of Aboriginal students and the female proportion of
+Non-Aboriginal students is between -15.6% and 16.7%.
+
+
+
+
+          
+
+
+
+

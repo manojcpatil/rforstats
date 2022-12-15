@@ -1,0 +1,203 @@
+---
+title: "EXPLORATORY DATA ANALYSIS"
+author: UMESH SUTAR  (2238)
+        GANESH PATIL (2220)
+        NILESH SALUNKHE(2231)
+date: "15/12/2022"
+output: slidy_presentation
+---
+---
+
+## What we Get by using EDA..
+- 1)What type of variation occurs within my variables..?
+- 2)What is of covariation occurs between my variables..?
+```{r,echo=FALSE,error=FALSE,warning=FALSE}
+knitr::include_graphics("C:/Users/GANESH/Desktop/eda.jpeg")
+fig_width= 5
+fig_height= 4
+```
+---
+
+---
+
+## WHAT IS DATA ANALYSIS...?
+- *Data analysis* is a process for obtaining the raw data, and subsequently converting it into information useful for decision making by users.Data is collected and analyzed to answer questions for testing in hypotheses or disprove theories.
+- _PROCESS OF DATA ANALYSIS_
+- 1)Data requirements
+- 2)Data collection
+- 3)Data processing
+- 4)Data cleaning
+- 5)Exploratory data analysis
+- 6)Modeling and algorithms
+- 7)Interpretation of Results..
+
+
+---
+---
+
+
+## INTRODUCTION TO EDA
+- _Exploratory data analysis (EDA)_ is an approach of analyzing data sets to summarize their main characteristics, often using statistical graphics and other data visualization methods.
+- This topic will be show you how to visualize your data in systematic way.The task that statistician call exploratory data analysis or EDA.
+- EDA is an important part in any data analysis.
+- EDA gives short and sweet idea about your data in easy way.
+- EDA help to generate questions about your data.
+- Using EDA you can understand data easily.
+
+---
+---
+
+
+## Objective
+- The primary goal of EDA is to maximize the analysts' insight into a data set and into the underlying structure of a data set.
+- The main purpose of EDA is to help look at data before making any assumptions.
+- Exploratory data analysis (EDA) involves using graphics and visualizations to explore and analyze a data set.
+- The goal is to explore, investigate and learn, as opposed to confirming statistical hypotheses.
+
+---
+---
+## EDA plot
+
+
+```{r,warning=FALSE,echo=FALSE}
+library(PASWR2)
+scores=c(119, 107, 96, 107, 97, 103, 94, 106, 87,
+112,99, 99, 90,106, 110,99, 105, 100, 100, 94)
+eda(scores)
+fig_width= 5
+fig_height= 4
+```
+---
+---
+
+## Probability Mass Function Plot
+The probability mass function graph is used to display the probabilities associated with the possible values of the random variable. A bar graph can be used to represent the probability mass function of the coin toss example as given below.
+
+```{r}
+x=c(0,1,2,3,4,5,6,7,8)
+p_x=c(0,2/34,6/34,7/34,9/34,4/34,1/34,4/34,1/3)
+# PMF plot
+plot(x,p_x,type="h",lwd=2)# Spike plot
+points(x,p_x,pch=16)
+
+```
+---
+---
+
+## Cumulative distribution function  plot
+A cumulative distribution function (CDF) plot shows the empirical cumulative distribution function of the data. The empirical CDF is the proportion of values less than or equal to X. It is an increasing step function that has a vertical jump of 1/N at each value of X equal to an observed value
+
+```{r}
+x=c(0,1,2,3,4,5,6,7,8)
+p_x=c(0,2/34,6/34,7/34,9/34,4/34,1/34,4/34,1/3)
+F_x=cumsum(p_x)# cumulative frequencies
+plot(x,F_x,type="s",lwd=2)
+points(x,F_x)
+
+```
+---
+---
+## Descriptive Statistics
+- Descriptive statistics are brief informational coefficients that summarize a given data set, which can be either a representation of the entire population or a sample of a population.
+- Descriptive statistics are broken down into measures of central tendency and measures of variability (spread).
+
+```{r,echo=FALSE,error=FALSE,warning=FALSE}
+data=read.csv("C:/Users/GANESH/Desktop/INDIA _GDP_DATA.csv")
+View(data)
+attach(data)
+with(data,summary(GDP_in_Billion))
+with(data,summary(Per_Capita._rupees))
+with(data,summary(Growth_per))
+```
+
+
+---
+---
+
+## Bar Chart
+
+- A variable is _cate‐gorica_l if it can only take one of a small set of values. In R, categorical variables are usually saved as factors or character vectors.
+To examine the distribution of a categorical variable, use a Bar chart:
+```{r,warning=FALSE}
+library(ggplot2)
+library(dplyr)
+Graph_1=ggplot(data = diamonds) +
+ geom_bar(mapping = aes(x = cut))
+Graph_1
+
+```
+---
+---
+
+## Histogram
+
+- A variable is continuous if it can take any of an infinite set of ordered values. Numbers and date-times are two examples of continuous variables. To examine the distribution of a continuous variable, use a histogram :
+```{r}
+ggplot(data = diamonds) +
+ geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
+```
+---
+---
+
+## frequency Polygon
+
+- If you wish to overlay multiple histograms in the same plot, then  use of geom_freqpoly() instead of geom_histogram().
+geom_freqpoly() performs the same calculation as geom_histo
+gram(), but instead of displaying the counts with bars, uses lines
+instead. It’s much easier to understand overlapping lines than bars:
+```{r}
+smaller = diamonds %>%filter(carat < 3)
+ggplot(data = smaller, mapping = aes(x = carat, color = cut)) +
+ geom_freqpoly(binwidth = 0.1)
+```
+---
+---
+
+## BOXPLOT
+
+- A box and whisker plot—also called a box plot—displays the five-number summary of a set of data. The five-number summary is the minimum, first quartile, median, third quartile, and maximum. In a box plot, we draw a box from the first quartile to the third quartile. A vertical line goes through the box at the median.
+
+```{r message=F, warning=F}
+library(ggplot2)
+data=read.csv("C:/Users/GANESH/Desktop/INDIA _GDP_DATA.csv")
+View(data)
+attach(data)
+ggplot(data,aes(x="",y=GDP_in_Billion))+
+  geom_boxplot(varwidth = T, notch=F,fill="red")
+```
+
+---
+---
+
+## Scatter plot
+
+- The point geom is used to create scatterplots. 
+- The scatterplot is most useful for displaying the relationship between two continuous variables. 
+- It can be used to compare one continuous and one categorical variable, or two categorical variables
+
+```{r}
+library(ggplot2)
+
+ggplot(data,aes(x=Year,y=GDP_in_Billion))+geom_point()
+```
+---
+---
+
+## Histogram
+- The histogram is a graph that illustrates quantitative (numerical) 
+data.
+- Histogram is used for numerical data, yet the bins that either the user 
+specifies or those that R uses by default.
+- Histograms created in R with the function hist(x)
+
+
+```{r}
+with(data,hist(GDP_in_Billion,freq=F,col = "red"))
+```
+---
+---
+
+ "**...............THANK YOU.......................**"
+---
+
+

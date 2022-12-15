@@ -1,0 +1,291 @@
+---
+title: "NON-PARAMETRIC TESTS USING R MARKDOWN"
+author: "2201-Prachi Badgujar, 2216- Sayali Nikhumbh ,2219-Damini Patil"
+date: "14/12/2022"
+output: slidy_presentation
+---
+# What is non-parametric test?
+
+Data do not follow any specific distribution and no assumptions about the population are Made
+
+Data measured on any scale
+
+# Parameter
+
+Parameter is any numerical quntity that characterizes a given population or some aspects of it. Most common statistics parameters are mean, median, mode, standard deviation.
+
+# Commonaly used tests
+
+-   Chi-Square tests
+
+-   Sign test
+
+-   Wilcoxon Signed-ranks test
+
+-   Mann-Whitney U or Wilcoxon rank sum test
+
+-   Shapiro wilk tests
+
+-   Kolmogorav-Smirov (K-S) test
+
+------------------------------------------------------------------------
+
+# Chi-Square
+
+-   First used by Karl Pearsons
+
+-   Simplest and Most Widely used Non-Parametric test in statistical work
+
+-   It is used for testing relationship between categorical variable
+
+-   compare the observed values in your data to the expected values that you would see if the null hypothesis is true
+
+-   calculated using :
+
+     $\chi^2$= $\sum((O-E)^2/E)$
+
+    where,  O=observed frequencies
+    E=expected frequency
+
+
+# Application of chi-square test
+
+-   Test of association(Smoking & Cancer, treatment & outcome of diesease , vaccination & immunity).
+
+-   Test of proportion (compare frequencies of diabetics & non-diabetics in groups).
+
+-   The chi-square for goodness of fit (determined if actual numbers are similar to the expected\\theoretical numbers).
+
+---
+
+
+# Example
+```{r}
+x=trunc(5 * runif(100));x
+table(x)
+chisq.test(table(x))
+fit=lm(weight~height,data=women);fit
+summary(fit)
+residuals(fit)
+```
+
+---
+
+
+```{r}
+plot(women$weight~women$height)
+abline(fit,col="blue")
+
+```
+
+---
+
+# Sign test
+
+- used for paired data, can be ordinal or continuous.
+
+- simple and easy to interpret. based sign(plus or minus)
+
+- Makes no assumptions about distribution of the .
+
+- To evaluate H0 we only need to know the signs of the differences .
+
+- if the half differences are positive and half are negative then median=0(H0 is true).
+
+- If the signs are unbalanced ,then that is evidences against H0
+
+---
+
+
+## sign test for one sample:
+    Qn: A manufacturering plant claim to produce widgets that weigh 50 pounds .to test this, an inspector goes out to the plant and randomly measures the weigh
+    of 20 widgets. determine if the median weights is significantly different from 50 pounds.
+```{r}
+x=c(51,52,52,50,49,47,52,55,48,49,50,51,51,51,49,46,51,52,47,52);x
+md=50  ### median given
+sp=length(x[x<md]);sp
+sn=length(x[x>md]);sn
+n=sp+sn;n
+pv=binom.test(sp,n,0.5);pv
+
+```
+
+ ## Conclusion : Here sp is the value of s+ and pv is the p- value. if given level of significance is less than p-value we accept the H0 here alpha=0.05. Hence accept H0 so population median of x is 50.
+ 
+ 
+ ---
+ 
+# Sign test for two samples
+  Qn : An I.Q test was administered 5 students before and after they were class. The results are given below
+```{r}
+students=c(1,2,3,4,5)
+before =c(110,120,123,132,125)
+after=c(120,118,125,136,121)
+data.frame(students,before,after)
+d=before-after
+sp=length(d[d>0]);sp
+sn=length(d[d<0]);sn
+n=sp+sn;n
+pv=pbinom(sp,n,0.5);pv
+```
+## Conclusion: 
+ Here sp is value of s+ and pv is the p-value. If given level of significance is less than p-value,
+we accept Ho Here alpha=0.05. hence accept Ho. So there is no increase in I.Q. after traning program. 
+
+---
+
+ 
+# Wilcoxon Singed Rank Test
+
+- Wilcoxon singed rank test is similar to sign test but sign test consider only direction & wilcoxon signed rank test consider direction as well as magnitude.
+
+- This test is used to determine whether two dependent samples were selected from population having the same distribution.
+
+- it also known as t-test for matched pairs or t-test for dependent samples.
+
+- There are two types of wilcoxon singed rank test.
+
+
+---
+
+# One-sample wilcoxon signed rank test
+
+  The given data set containing the weight of 10 rabbits. If the median weight of the rabbits differs from 25g?
+  
+```{r}
+ set.seed(1234)
+myData=data.frame(name=paste0(rep("R",10),1:10),weight=round(rnorm(10,30,2),1))
+print(myData)
+wilcox.test(myData$weight,mu=25)
+```
+
+  # Conclusion: In the given output , p-value of the test is 0.005793, which is less than significance level alpha=0.05.So we can reject null hypothesis.There for we conclude that the average weight of the rabbit is significantly different from 25g. 
+
+
+
+# Example for Two-sample wilcoxon signed rank test
+
+  The following are the weights in Kg of 16 persons.Before and After a certain of four weeks are given. Test whether the weight reducing diet is effective at 0.01 level of significance.  
+  
+```{r}
+ before=c(80.7,78.1,82.4,86.8,90.1,75.9,74.5,72.2,74.3,87.5,86.1,85.75,81.89,88.3,83.33,73)
+ after=c(75.1,70.3,74.4,80.7,75.9,60.12,62.15,75,69.8,89,70.2,76.4,72.7,76.9,79.11,66.16)
+ d=before-after
+ wilcox.test(d,mu=0,alternative = "less")
+```
+
+ # Conclusion: In the given output, p-value is greater than given significance level of alpha. So we accept null hypothesis. There for we conclude that weight reducing diet is effective 
+ 
+ ---
+ 
+## Mann- Whitney U test
+ - This test is similar to wilcoxon signed rank test expect that the sample are independent and not paired.
+ 
+ - In this test the null hypothesis of the population means are same for two groups.
+ 
+ - Rank the combined data value for two groups. Then find average rank of each groups.
+  
+- Then U value is calculated using the formula:
+     $\ U=N1*N2+(Nx(Nx+1)/2)-Rx$
+     
+## Example for Mann-Whitney tests
+qn: The following are the lengths of time (in minute) spend in the operating room by 20 patients undergoing the some operative procedure.
+```{r}
+A=c(35,30,33,39,41,29,30,36,45,40,31);A
+B=c(45,38,42,50,48,51,32,37,46);B
+wilcox.test(A,B,alter="greater")
+```
+## conclusion:
+  In the given output, p-value is greater than given significance level of alpha. So we accept null hypothesis. Therefor so the patients in the hospital B tend to be in the operating room longer than patients in hospital A for a some operative procedure.
+  
+---
+
+## Shapiro wilk tests
+
+- It examines how close the sample data fit to a normal distributions.
+
+- If the p-value of the test if less than 0.05, then we reject the null hypothesis at 5% significance and conclude that your data is non-normal.
+
+- The shapiro wilk test is more appropriate for the small size samples(<50).
+
+---
+
+
+## Examples for Shapiro wilk tests
+```{r}
+library("PASWR")
+ attach(Fertilize)
+ View(Fertilize)
+shapiro.test(self)
+plot(density(cross,self))
+
+n=length(cross)
+m=length(self)
+
+g=as.factor(c(rep("cross",n),rep("self",m)))
+k=c(cross,self)
+
+
+```
+
+
+## conclusion:
+There is significant difference in both the variables.
+
+---
+
+## Kolmogorav-Smirnov test
+- The kolmogorav-smirnov test is used for goodness of fit
+- Is used to decide if a sample comes from a population with specific distribution.
+- The formula for K-S test can be given as
+$\ Dn=supx | Fn(x)-F(x)|$
+```{r}
+library("dgof")
+x=rnorm(50)
+y=runif(30)
+ks.test(x,y)
+plot(ecdf(x),
+     xlim=range(c(x,y)),
+     col="blue")
+plot(ecdf(y),
+    add=TRUE,
+    lty= "dashed",
+    col= "red")
+
+```
+## conclusion:
+  Being quite sensitive to the difference of ahape and location of the emipirical cumulative distribution of the chosen two samples,The two sample k-s test is efficient and one of the most general and usefull non parameteric test. hence from the we can see the difference between two samples.
+
+---
+
+
+
+ 
+
+## Advantages of non- parametric tests
+- These tests are distribution free.
+
+- Easier to calculated and less time consuming than parametric tests when sample size is small.
+
+- Can be used with any type of data.
+
+- Many non-parametric methods make it possible to work with very small samples, particularly helpful in collecting pilot study data or medical researcher working with a rare        disease.
+
+---
+
+## Limitations of non-parametric methods
+
+- Statistical methods which requires no assumptions about populations are usually less efficient.
+
+- As the sample size get larger, data manipulatios required for non-parametric tests becomes tests becomes laborious.
+
+- A collection of tabulated critical values for a variety of non-parametric tests under situations dealing with various sample sizes is not readily available.
+
+
+ 
+ 
+ 
+ 
+ 
+
+

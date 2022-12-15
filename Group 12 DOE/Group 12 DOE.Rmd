@@ -1,0 +1,845 @@
+---
+title: "Design Of Experiments(DOE)"
+author:  'Group No-12  
+- Name:Patil Jagruti Ajay 2223
+
+- Name:Patil Purva Sanjay 2228 
+
+- Name:Wani Dipali Murlidhar 2241'
+
+date: "2022-12-12"
+output: slidy_presentation
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## *<span style="color:brown;">Design Of Experiments</span>*
+-  Experiment
+-  Treatment
+-  Experimental Unit & Experimental Material
+-  Yield(Output)
+-  Factor
+-  Experimental Error
+
+
+---
+
+## *<span style="color: purple;">Basic Principal Of Experimental Design</span>*
+
+-  Replication
+-  Randomisation
+-  Local Control(Error Control)
+
+
+---
+
+
+## *<span style="color: red;">Index</span>*
+
+
+- ANALYSIS OF CRD
+- ANALYSIS OF RBD
+- ANALYSIS OF LSD
+- MISSING PLOT TECHNIQUES IN RBD
+- MISSING PLOT TECHNIQUES IN LSD
+- FACTORIAL EXPERIMENT
+
+---
+
+
+## *<span style="color: blue;">1 Analysis of CRD</span>*
+---
+
+Completely Randomized Design ( CRD )
+
+DEFINITION :
+      A CRD is a design where the treatments are assigned completely at random so that each unit has the same chance of receiving any one treatment . For the CRD , any difference among the units receiving the same treatment is considered as an experimental error.
+
+- For CRD, experimental material is homogeneous and there is no restrictions on randomization. 
+- Unequal number of replication for the treatments are allowed.
+
+---
+
+
+## *<span style="color: orange;">Example</span>*
+
+
+Q-Analyse the following design.
+
+
+        B    C    C   A
+
+       12   10   18   10
+
+        C    A    B    B
+
+       11   15    9   10
+
+        A    B    A    C
+
+       10   12   10   18
+
+
+---
+
+**commands**
+```{r,eval=False}
+y=c(12,11,10,10,15,12,18,9,10,10,10,18);
+length(y)
+t=c("B","C","A","C","A","B","C","B","A","A","B","C")
+t=factor(t)
+d=data.frame(t,y);d
+analysis=summary(aov(y~t));analysis
+tabf=qf(0.95,2,9);tabf
+tabf>calf #Hence H0 is failed to reject H0 (Ho is accepted)
+```
+
+
+
+---
+
+
+**Output:**
+```{r}
+y=c(12,11,10,10,15,12,18,9,10,10,10,18);
+length(y)
+t=c("B","C","A","C","A","B","C","B","A","A","B","C")
+t=factor(t)
+d=data.frame(t,y);d
+analysis=summary(aov(y~t));analysis
+tabf=qf(0.95,2,9);tabf
+#tabf>calf Hence H0 is failed to reject H0 (Ho is accepted)
+
+```
+
+---
+
+
+## *<span style="color: green;">Advantages and disadvantages of CRD</span>*
+
+- Any number of replications and treatments can be used.
+- The number of replications may  vary from treatment to treatment.
+- The analysis remains simple even if information on some units is missing.
+- This design provides maximum number of degrees of freedom for the estimation of error  than the other designs.
+
+---
+
+
+## *<span style="color: blue;">2 Analysis Of RBD</span>*
+
+DEFINITION :
+     If the experimental material is heterogeneous and the fertility gradient is only in one direction then to control experimental error we divide experimental material into homogeneous groups (blocks) perpendicular to the direction of fertility gradient. If treatments are applied at random to units within each block and replicated over all the blocks, the design is a R.B.D.
+
+- Randomization is restricted.
+- We control one source of variation by stratification.
+- With this design each treatment will have same number of replications. 
+
+---
+
+
+## *<span style="color: orange;">Example</span>*
+
+Q-Analyse the following design.
+
+
+
+        (1)  (3)  (2)  (4)  (5)  (6)
+
+        27.8 16.2 27.3 26.3 39.5 28.5
+
+        (3)  (2)  (1)  (4)  (6)  (5)
+
+        27.7 24.9 15.0 19.6 15.4 14.1
+
+        (6)  (4)  (1)  (3)  (2)  (5)
+
+        30.6 22.7 22.5 38.5 17.7 34.9
+
+        (5)  (2)  (1)  (4)  (3)  (6)
+
+        16.2 28.8 17.0 36.8 31.0 22.6
+        
+---
+
+
+**commands**
+
+y=c(27.8,27.7,30.6,16.2,16.2,24.9,22.7,28.8,27.3,15.0,22.5,17.0,26.3,19.6,38.5,36.8,39.5,15.4,17.7,31.0,28.5,14.1,34.9,22.6)
+
+length(y)
+
+t=c(1,3,2,4,5,6,3,2,1,4,6,5,6,4,1,3,2,5,5,2,1,4,3,6)
+
+length(t)
+
+b=c(rep('1',6),rep('2',6),rep('3',6),rep('4',6))
+
+t=factor(t)
+
+b=factor(b)
+
+d=data.frame(t,b,y);d
+
+analysis=summary(aov(y~t+b));analysis
+
+tabf1=qf(0.95,5,15);tabf1
+
+tabf2=qf(0.95,3,15);tabf2
+
+H01: All the treatment have same mean
+
+H02: All the block are homogeneous
+
+tabf1<calf1 Hence H01 is rejected
+
+tabf2<calf2 Hence H02 is rejected
+
+---
+
+
+**Output:**
+```{r}
+y=c(27.8,27.7,30.6,16.2,16.2,24.9,22.7,28.8,27.3,15.0,22.5,17.0,26.3,19.6,38.5,36.8,39.5,15.4,17.7,31.0,28.5,14.1,34.9,22.6)
+length(y)
+t=c(1,3,2,4,5,6,3,2,1,4,6,5,6,4,1,3,2,5,5,2,1,4,3,6)
+length(t)
+b=c(rep('1',6),rep('2',6),rep('3',6),rep('4',6))
+t=factor(t)
+b=factor(b)
+d=data.frame(t,b,y);d
+analysis=summary(aov(y~t+b));analysis
+tabf1=qf(0.95,5,15);tabf1
+tabf2=qf(0.95,3,15);tabf2
+# H01: All the treatment have same mean
+# H02: All the block are homogeneous
+#tabf1<calf1 Hence H01 is rejected
+#tabf2<calf2 Hence H02 is rejected
+
+```
+
+---
+
+
+## *<span style="color: green;">Advantages and disadvantages of RBD</span>*
+
+- RBD has been shown to be more efficient or accurate than CRD
+- The amount of information obtained in RBD is more as compared to CRD. 
+  Hence, RBD is  more efficient than CRD.
+- Flexibility is another advantage of RBD.
+- RBD may give misleading results if blocks are not homogeneous.
+
+---
+
+
+## *<span style="color: blue;">3 Analysis Of LSD</span>*
+
+Latin Square Design (L.S.D)
+
+DEFINITION : 
+       In RBD the experimental material is divided into homogeneous group(Blocks) and treatments are allocated at random to the units within each block i.e. randomisation is subjected to one restriction i.e within block. If the experimental material is bi-directional (or two directional) then RBD can not be used.
+
+- In a latin square every row and every columns is complete replication.
+- The latin square provides more opportunity than randomized block for the reduction of error.  
+
+
+---
+
+
+## *<span style="color: orange;">Example</span>*
+
+Q-Set up the analysis of variance for the following results of a L.S.D.
+
+        A    C    B    D
+        
+       12   19   10    8
+
+       C    B    D    A
+
+       18   12    6    7
+
+        B    D    A    C
+        
+       22   10    5   21
+        
+        D    A    C    B
+       
+       12    7   27   17
+       
+---
+
+
+**commands**
+
+y=c(12,18,22,12,19,12,10,7,10,6,5,27,8,7,21,17);
+
+length(y)
+
+t=c(1,3,2,4,3,2,4,1,2,4,1,3,4,1,3,2);
+
+length(t)
+
+r=c(rep(1:4,4));r
+
+c=c(rep(1:4,each=4));c
+
+t=factor(t)
+
+r=factor(r)
+
+c=factor(c)
+
+d=data.frame(t,r,c,y);d
+
+analysis=summary(aov(y~t+r+c+y))
+
+analysis
+
+tabf=qf(0.95,3,6);tabf
+
+H01:All the treatment have same mean
+
+H02: All the rows are homogeneous
+
+H03: All the columns are homogeneous
+
+calf>tabf we reject H01
+
+calf<tabf we accepted H02 and H03(fail to reject H02 and H03)
+
+---
+
+
+**Output:**
+
+```{r}
+y=c(12,18,22,12,19,12,10,7,10,6,5,27,8,7,21,17);
+length(y)
+t=c(1,3,2,4,3,2,4,1,2,4,1,3,4,1,3,2);
+length(y)
+r=c(rep(1:4,4));r
+c=c(rep(1:4,each=4));c
+t=factor(t)
+r=factor(r)
+c=factor(c)
+d=data.frame(t,r,c,y);d
+analysis=summary(aov(y~t+r+c+y))
+analysis
+tabf=qf(0.95,3,6);tabf
+#H01:All the treatment have same mean
+#H02: All the rows are homogeneous
+#H03: All the columns are homogeneous
+#calf>tabf we reject H01
+#calf<tabf we accepted H02 and H03(fail to reject H02 and H03)
+
+```
+
+---
+
+
+## *<span style="color: green;">Advantages and disadvantages of LSD</span>*
+
+- With two-way grouping or stratification L.S.D controls more of the variation than C.R.D or R.B.D
+- L.S.D is an incomplete 3 way layout Instead of m^3 experiment units only m^2 units are needed.
+- The statistical analysis is simple. It is slightly difficult in case of 2 or more missing observations.
+- L.S.D depends on the assumption that there are no interaction present, generally rows and columns may interact with each other.
+
+---
+
+
+## *<span style="color:black;">Missing Plot Technique</span>*
+ 
+
+*<span style="color: red;">Missing Plot :</span>*
+
+In design of experiment the values of response variable(Yij) for some experimental units may be missing or lost or even if available are to small or to high as compared with other observations.
+
+*<span style="color: red;">Missing Plot Technique :</span>*
+
+This method was developed by Fisher. It consist of estimating the missing observation by the values which minimize the error sum of squares.
+
+---
+
+
+## *<span style="color: blue;">Missing Plot Technique in RBD</span>*
+
+*<span style="color: orange;">Example</span>*
+
+Q-Estimate the missing value and analyse the data.
+                  
+                  
+           (1)     (2)   (3)    (4)   (5)   (6)
+       
+    (1)    18.5   15.7  16.2   14.1  13.0  13.6
+
+    (2)    11.7    0.0  12.9   14.4  16.9  12.5
+
+    (3)    15.4   16.6  15.5   12.3  18.4  21.5
+
+    (4)    16.5   18.6  12.7   15.7  16.5  18.0
+
+---
+
+
+**commands**
+
+y=c(18.5,11.7,15.4,16.5,15.7,0,16.6,18.6,16.2,12.9,15.5,12.7,14.1,14.4,12.3,15.7,13.0,16.9,18.4,16.5,13.6,12.5,21.5,18.0)
+
+g=sum(y);g
+
+t2=sum(11.7,0,12.9,14.4,16.9,12.5);t2
+
+b2=sum(15.7,0,16.6,18.6);b2
+
+n=6 #no of blocks
+
+k=4 #no of treatment
+
+To calculate missing value
+
+x=missing value
+
+num=(k*t2+n*b2-g)
+
+den=(n-1)*(k-1)
+
+x=(num/den);x
+
+y[6]=x;y
+
+t=c(rep(1:4,6));t
+
+b=c(rep(1:6,each=4));b
+
+t=factor(t);t
+
+b=factor(b);b
+
+d=data.frame(t,b,y);d
+
+analysis=summary(aov(y~t+b))
+
+analysis
+
+calculation for missing plot tech 
+
+sse=86.85;sse
+
+df=(n-1)*(k-1)-1
+
+mse=sse/df   #(n-1)*(k-1)-1=14
+
+mse
+
+calFt=9.433/mse   calf1=msst/mse
+
+calFt
+
+calFb=4.337/mse   calf1=mssb/mse
+
+calFb
+
+for tabulated value:
+
+- tab1=qf(0.95,3,14);tab1
+- tab2=qf(0.95,5,14);tab2
+
+H01: All Treatments have same mean.
+
+H02: All Blocks are homogeneous
+
+since, calf < tabf : we accept H01 and H02 otherwise rejected
+
+---
+
+
+**Output:**
+
+```{r}
+y=c(18.5,11.7,15.4,16.5,15.7,0,16.6,18.6,16.2,12.9,15.5,12.7,14.1,14.4,12.3,15.7,13.0,16.9,18.4,16.5,13.6,12.5,21.5,18.0)
+g=sum(y);g
+t2=sum(11.7,0,12.9,14.4,16.9,12.5);t2
+b2=sum(15.7,0,16.6,18.6);b2
+n=6 #no of blocks
+k=4 #no of treatment
+#To calculate missing value
+#x=missing value
+num=(k*t2+n*b2-g)
+den=(n-1)*(k-1)
+x=(num/den);x
+y[6]=x;y
+t=c(rep(1:4,6));t
+b=c(rep(1:6,each=4));b
+t=factor(t);t
+b=factor(b);b
+d=data.frame(t,b,y);d
+analysis=summary(aov(y~t+b))
+analysis
+#calculation for missing plot tech 
+sse=86.85;sse
+df=(n-1)*(k-1)-1
+mse=sse/df   #(n-1)*(k-1)-1=14
+mse
+calFt=9.433/mse   #calf1=msst/mse
+calFt
+calFb=4.337/mse   #calf1=mssb/mse
+calFb
+
+#for tabulated value:
+tab1=qf(0.95,3,14);tab1
+tab2=qf(0.95,5,14);tab2
+#H01: All Treatments have same mean.
+#H02: All Blocks are homogeneous
+#since, calf < tabf : we accept H01 and H02 otherwise rejected
+```
+
+---
+
+
+## *<span style="color: blue;">Missing Plot Technique in LSD</span>*
+
+
+
+ *<span style="color: orange;">Example</span>*
+ 
+Q-Estimate the missing observation and analyse the data.
+
+
+       A    B    C    D    E
+       
+      195  150  120  135  135
+       
+       E    C    A    B    D
+
+      150  120  210    0  165
+
+       B    D    A    B    C
+
+      225   90  195  150  270
+
+       D    E    B    A    C
+
+      180  135  165  195  180
+
+       C    A    D    E    B
+
+      240  165  150  105  210
+      
+---
+
+
+**commands**
+
+y=c(195,150,225,180,240,150,120,90,135,165,120,210,195,165,150,135,0,150,195,105,135,165,270,180,210)
+
+g=sum(y);g
+
+r=sum(150,120,210,0,165)
+
+c=sum(135,0,150,195,105)
+
+t=sum(225,150,165,0,210)
+
+m=5
+
+num=m*t+m*r+m*c-2*g
+
+den=(m-2)*(m-1)
+
+x=num/den;x
+
+y[17]=x;y
+
+treat=c(1,5,2,4,3,2,3,4,5,1,3,1,5,2,4,4,2,3,1,5,5,4,1,3,2);length(treat)
+
+row=c(rep(1:5,5));row
+
+col=c(rep(1:5,each=5));col
+
+treat=factor(treat)
+
+row=factor(row)
+
+col=factor(col)
+
+d=data.frame(y,treat,row,col);d
+
+analysis=summary(aov(y~treat+row+col));analysis
+
+sse=9645;sse
+
+df=(m-1)*(m-2)-1;df
+
+mse=sse/df
+
+mse
+
+calculated F for treat 
+
+fcal_1=3580/mse;fcal_1   #msst/mse
+
+calculated F for row
+
+fcal_2=1101/mse;fcal_2 #mssr/mse  
+
+calculated F for col
+
+fcal_3=3989/mse;fcal_3   #mssc/mse
+
+tabf=qf(0.95,4,11);tabf
+
+Ho1: All Treatments have same mean.
+
+H02: All Blocks are homogeneous
+
+Ho3: All Columns are homogeneous
+
+tabf > calf : we accept Ho1 otherwise reject Ho1.
+
+tabfr > calfr or tabfc> calfc : we accept Ho2 and Ho3 otherwise reject Ho2 and Ho3.
+
+---
+
+
+**Output:**
+```{r}
+y=c(195,150,225,180,240,150,120,90,135,165,120,210,195,165,150,135,0,150,195,105,135,165,270,180,210)
+g=sum(y);g
+r=sum(150,120,210,0,165)
+c=sum(135,0,150,195,105)
+t=sum(225,150,165,0,210)
+m=5
+num=m*t+m*r+m*c-2*g
+den=(m-2)*(m-1)
+x=num/den;x
+y[17]=x;y
+treat=c(1,5,2,4,3,2,3,4,5,1,3,1,5,2,4,4,2,3,1,5,5,4,1,3,2);length(treat)
+row=c(rep(1:5,5));row
+col=c(rep(1:5,each=5));col
+treat=factor(treat)
+row=factor(row)
+col=factor(col)
+d=data.frame(y,treat,row,col);d
+analysis=summary(aov(y~treat+row+col));analysis
+sse=9645;sse
+df=(m-1)*(m-2)-1;df
+mse=sse/df
+mse
+fcal_1=3580/mse;fcal_1   #calculated F for treat
+fcal_2=1101/mse;fcal_2   #calculated F for row
+fcal_3=3989/mse;fcal_3   #calculated F for col
+tabf=qf(0.95,4,11);tabf
+#Ho1: All Treatments have same mean.
+#H02: All Blocks are homogeneous
+#Ho3: All Columns are homogeneous
+#tabf > calf : we accept Ho1 otherwise reject Ho1.
+#tabfr > calfr or tabfc> calfc : we accept Ho2 and Ho3 otherwise reject Ho2 and Ho3.
+```
+
+
+---
+
+
+## *<span style="color: blue;">Factorial Experiment (Complex Experiment)</span>*
+
+DEFINITION:
+     The experiment which deals with two or more sets of treatments at a time is called as complex experiment or factorial experiment.
+
+- In factorial experiment the effects of several factors of variations are studied and investigated simultaneously the treatments being all the combination of different factors under study.
+- In factorial experiment we estimate the effects of each of the factors and also the interaction effects. 
+
+*There are two types of Factorial Experiment:*
+
+- *2^2 Factorial Experiment*
+- *2^3 Factorial Experiment*
+
+---
+
+
+## *<span style="color:red;">2^2 Factorial Experiment</span>*
+ There are two factors (A & B) each present at two levels.
+ 
+ i.e(ao,a1)& (bo,b1)
+
+ *Treatment combination=2^2=4*
+ 
+    - aobo=1, A and B are present at 1st level.
+    - a1bo=a, A at 2nd level and B at 1st level.
+    - aob1=b, A at 1st level and B at 2nd level.
+    - a1b1=ab, A and B are present at 2nd level.
+ 
+## *<span style="color:orange;">Example</span>*
+
+Q-Analyse the data and give your conclusion.
+
+
+       I       II
+    
+    01 28   00 37
+    
+    10 42   10 30
+    
+    11 31   01 23
+    
+    00 38   11 47
+  
+---
+
+
+
+y=c(28,42,31,38,37,30,23,47);length(y)
+
+b=c(rep(1:2,each=4));b
+
+A=c(0,1,1,0,0,0,1,1);length(A)
+
+A=factor(A)
+
+B=c(0,0,1,0,0,1,1,1);length(B)
+
+B=factor(B)
+
+d=data.frame(b,A,B,y);d
+
+analysis=summary(aov(y~b+A+B+A*B));analysis
+
+tabf=qf(0.95,1,3);tabf 
+
+Calf > Tabf, we reject the hypothesis
+
+Calf < Tabf, we reject the hypothesis
+
+---
+
+
+Output:
+```{r}
+y=c(28,42,31,38,37,30,23,47);length(y)
+b=c(rep(1:2,each=4));b
+A=c(0,1,1,0,0,0,1,1);length(A)
+A=factor(A)
+B=c(0,0,1,0,0,1,1,1);length(B)
+B=factor(B)
+d=data.frame(b,A,B,y);d
+analysis=summary(aov(y~b+A+B+A*B));analysis
+tabf=qf(0.95,1,3);tabf 
+# Calf > Tabf, we reject the hypothesis
+# Calf < Tabf, we reject the hypothesis
+
+```
+
+---
+
+
+## *<span style="color: red;">2^3 Factorial Experiment</span>*
+
+ There are three factors (A & B & C) each present at two levels.
+ 
+ i.e(ao,a1),(bo,b1) & (co,c1)
+ 
+ *Treatment combination=2^3=8*
+ 
+      aoboco=1, A,B and C are present at 1st level.
+      a1boco=a, A at 2nd level and B and C at 1st level.
+      aob1co=b, B at 2nd level A and C at 1st level.
+      aoboc1=c, C at 2nd level A and B at 1st level.
+      a1b1co= ab, A and B at 2nd level and C at 1st level.
+      a1boc1=ac, A and C at 2nd level and B at 1st level.
+      aob1c1=bc, A at 1st level and B and C at 2nd level.
+      a1b1c1=abc, A, B and C are present at 2nd level.
+ 
+ 
+## *<span style="color: orange;">Example</span>*
+
+Q-Analyse the data and give your conclusions.
+
+
+           I           II          III
+
+    011  49.5    011  49.8    010  62.8
+
+    000  46.8    100  59.8    100  69.5
+
+    110  62.8    111  58.5    111  55.8
+
+    101  57.0    000  51.5    001  55.8
+
+    100  62.0    110  52.0    000  56.0
+
+    010  44.2    001  55.5    101  57.2
+
+    111  48.8    010  56.0    110  39.0
+
+    001  45.5    101  49.8    011  53.3
+    
+---
+
+
+
+y=c(49.5,46.8,62.8,57.0,62.0,44.2,48.8,45.5,49.8,59.8,58.5,51.5,52.0,55.5,56.0,49.8,62.8,69.5,55.8,55.8,56.0,57.2,39.0,53.3)
+
+length(y)
+
+b=c(rep(1:3,each=8));b
+
+b=factor(b);b
+
+n=c(0,0,1,1,1,0,1,0,0,1,1,0,1,0,0,1,0,1,1,0,0,1,1,0);length(n)
+
+n=factor(n);n
+
+k=c(1,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,1,1);length(k)
+
+k=factor(k);k
+
+p=c(1,0,0,1,0,0,1,1,1,0,1,0,0,1,0,1,0,0,1,1,0,1,0,1);length(p)
+
+p=factor(p);p
+
+d=data.frame(b,n,k,p,y);d
+
+analysis=summary(aov(y~b+n+k+p+n*p+n*k+k*p+n*k*p));analysis
+
+tabf1=qf(0.95,2,14);tabf1
+
+tabf2=qf(0.95,1,14);tabf2
+
+Ho1: All blocks are homogeneous.
+
+Ho2: All factorial effect are significant.
+
+calf < tabf1 Ho1 is accepted.
+
+calf < tabf1 Ho2 is accepted.(all treat and interaction effect)
+
+---
+
+
+Output:
+```{r}
+y=c(49.5,46.8,62.8,57.0,62.0,44.2,48.8,45.5,49.8,59.8,58.5,51.5,52.0,55.5,56.0,49.8,62.8,69.5,55.8,55.8,56.0,57.2,39.0,53.3)
+length(y)
+b=c(rep(1:3,each=8));b
+b=factor(b);b
+n=c(0,0,1,1,1,0,1,0,0,1,1,0,1,0,0,1,0,1,1,0,0,1,1,0);length(n)
+n=factor(n);n
+k=c(1,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,1,1);length(k)
+k=factor(k);k
+p=c(1,0,0,1,0,0,1,1,1,0,1,0,0,1,0,1,0,0,1,1,0,1,0,1);length(p)
+p=factor(p);p
+d=data.frame(b,n,k,p,y);d
+analysis=summary(aov(y~b+n+k+p+n*p+n*k+k*p+n*k*p));analysis
+tabf1=qf(0.95,2,14);tabf1
+tabf2=qf(0.95,1,14);tabf2
+#Ho1: All blocks are homogeneous.
+#Ho2: All factorial effect are significant.
+#calf < tabf1 Ho1 is accepted.
+#calf < tabf1 Ho2 is accepted.(all treat and interaction effect)
+                                       
+```
+ 
+ 

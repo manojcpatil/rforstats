@@ -1,0 +1,409 @@
+---
+title: "Control Charts in SPC using R"
+author: 'GROUP_13 
+
+  2205: Bunde Gayatri
+  
+  
+  2227: Patil Priyanka 
+  
+  
+  2236: Sonavane Shruti
+  
+  
+  2244: Yeole Rutuja 
+  
+  
+   (M.Sc Statistics(I) Batch:2022-24 KBC NMU Jalgaon) ' 
+                                                           
+date: "`r Sys.Date()`"
+output: slidy_presentation
+---
+
+# What is a control chart?
+A control chart—sometimes called a Shewhart chart, a statistical process control chart, or an SPC chart—is one of several graphical tools typically used in quality control analysis to understand how a process changes over time.
+
+The main elements of a control chart include:
+
+* A visual time series graph that illustrates data points collected at specific time intervals.
+* A horizontal control line to more easily visualize variations and trends.
+* Horizontal lines, representing upper and lower control limits, placed at equal distances above and below the control line. These upper and lower limits are calculated from the data that is recorded on the time series graph over a specified period of time.
++ If t is the underlying statistic then these values depend on the sampling distribution of t and are given by:
+    + U.C.L = E(t)+3S.E(t)
+    + L.C.L = E(t)-3S.E(t)
+    + C.L = E(t)
+
+---
+
+
+## Types of control charts
+
+There are two types of control charts that we deal with.
+
+#### Variables Control Charts:
+
+These charts are applied to data that follow a continuous distribution.
+
+#### Attributes Control Charts:
+
+These charts are applied to data that follow a discrete distribution.
+
+---
+
+## qcc package
+
+qcc is a contributed R package for statistical quality control charts which provides:
+
+* Shewhart quality control charts for continuous, attribute and count data
+* Cusum and EWMA charts
+* Operating characteristic curves
+* Process capability analysis
+* Pareto chart and cause-and-effect chart
+* Multivariate control charts.
+
+syntax of qcc()-->
+
+ qcc(data, type, sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+
+---
+
+
+# Variable Control Charts
+
+### Xbar Chart 
+
+>qcc(data, type = "xbar", sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+       
+       The function creates Xbar Chart
+    
+>stats.xbar(data, sizes)
+       
+       The function stats.xbar returns a list with components statistics and  center.
+>sd.xbar(data, sizes, std.dev = c("UWAVE-R", "UWAVE-SD", "MVLUE-R", "MVLUE-SD", "RMSDF"))
+       
+       The function sd.xbar returns the standard deviation of the statistic charted.   
+    
+>limits.xbar(center, std.dev, sizes, conf)
+       
+       The function limits.xbar returns a matrix with lower and upper control limits.
+       
+---
+
+       
+# XBAR CHART
+```{r, warning=FALSE}
+library(qcc)
+data(boiler)
+xbar_chart=qcc(data = boiler,type = "xbar", sizes = 8)
+x=stats.xbar(data = boiler, sizes = 8);x
+center_xbar=(x$center)/25;center_xbar
+std_dev_xbar=sd.xbar(data = boiler);std_dev_xbar
+limits.xbar(center = center_xbar,std.dev = std_dev_xbar,sizes = 8,conf = 3)
+
+```
+
+
+---
+      
+### R Chart 
+
+>qcc(data, type = "R", sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+       
+       The function creates R Chart
+       
+>stats.R(data, sizes)
+       
+       The function stats.R returns a list with components statistics and center.
+       
+>sd.R(data, sizes, std.dev = c("UWAVE-R", "MVLUE-R"))
+
+       The function sd.R returns the standard deviation of the statistic charted.
+       
+>limits.R(center, std.dev, sizes, conf)
+       
+       The function limits.R returns a matrix with lower and upper control limits.
+       
+---
+
+# R CHART   
+```{r}
+R_chart=qcc(data = boiler,type = "R", sizes = 8)
+r=stats.R(data = boiler, sizes = 8);r
+center_r=r$center;center_r
+std.dev_r=sd.R(data = boiler);std.dev_r
+limits.R(center = center_r,std.dev = std.dev_r,sizes = 8,conf = 3)
+```
+
+
+---
+
+
+### S Chart
+
+>qcc(data, type = "S", sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+       
+       The function creates S Chart
+       
+>stats.S(data, sizes)
+       
+       The function stats.S returns a list with components statistics and center.
+       
+>sd.S(data, sizes, std.dev = c("UWAVE-SD", "MVLUE-SD", "RMSDF"))
+
+       The function sd.S returns the standard deviation of the statistic charted.
+       
+>limits.S(center, std.dev, sizes, conf)
+       
+       The function limits.S returns a matrix with lower and upper control limits.
+
+---
+
+# S CHART 
+```{r}
+S_chart=qcc(data = boiler,type = "S", sizes = 8)
+s=stats.S(data = boiler, sizes = 8);s
+center_s=s$center;center_s
+std.dev_s=sd.S(data = boiler);std.dev_s
+limits.S(center = center_s,std.dev = std.dev_s,sizes = 8,conf = 3)
+```
+
+---
+
+    
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Attribute Control Charts
+ 
+Attribute control charts are used to evaluate variation in a process where the measurement is an attribute 
+
+i.e. is discrete or count data 
+
+eg.pass/fail,conforming/non-conforming,no. of defects,...etc.
+
+These charts are used to study how a process changes over time.
+
+A control charts always has central line(CL) for average, upper line(UCL) for upper control limit & lower line(LCL) for lower control limit.
+
+
+### Types of attributes control charts:
+ 
+- p chart
+- np chart
+- c chart
+- u chart
+
+---
+
+- To construct the Attribute Control Charts the atrribute data Orangejuice from "qcc" package is used here.
+
+>library("qcc")
+
+    To recall the package named "qcc"
+    
+>data(orangejuice)
+
+    To attach data orangejuice from package "qcc"
+    
+>head(orangejuice)
+
+     To return the first 6 observations of the data orangejuice 
+
+
+```{r,echo=FALSE}
+library("qcc")
+data(orangejuice)
+head(orangejuice)
+```
+
+
+---  
+
+
+## p chart-->
+
+This chart shows the fraction of nonconforming or defective product produced by a
+manufacturing process. It is also called the control chart for fraction nonconforming.
+
+>qcc(data, type = "p", sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+       
+       The function creates p Chart
+       
+>stats.p(data, sizes)
+   
+     The function stats.p returns a list with components statistics and center.
+     
+>sd.p(data, sizes, ...)
+
+    The function sd.p returns std.dev the standard deviation of the statistic charted.
+    
+>limits.p(center, std.dev, sizes, conf)
+
+    The function limits.p returns a matrix with lower and upper control limits.
+
+
+
+---
+
+```{r}
+qcc(orangejuice$D,type="p",size=50,xlab="sample no.",ylab="proportion of Nonconformings(D)")
+x=stats.p(orangejuice$D , sizes = 50)
+center_p=(x$center)/54;center_p
+sd_=sd.p(x$statistics,54);sd_
+limits.p(center_p,sd_, sizes=50, conf = 3)
+
+```
+
+---
+
+## np chart-->
+
+This chart show the number of nonconforming. Almost the same as the p chart.
+
+>qcc(data, type = "np", sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+       
+       The function creates np Chart
+       
+>stats.np(data, sizes)
+   
+     The function stats.np returns a list with components statistics and center.
+     
+>sd.np(data, sizes, ...)
+
+    The function sd.np returns std.dev the standard deviation of the statistic charted.
+    
+>limits.np(center, std.dev, sizes, conf)
+
+    The function limits.np returns a matrix with lower and upper control limits.
+
+
+
+---
+
+```{r}
+qcc(orangejuice$D,type="np",size=50,xlab="sample no.",ylab="No.of Nonconformings(D)")
+y=stats.np(orangejuice$D , sizes = 50)
+center_np=(y$center)/54;center_np
+sd_=sd.np((y$statistics)/54,50);sd_
+limits.np(center_np,sd_, sizes=50, conf = 3)
+
+```
+       
+
+
+---
+
+
+## c chart-->
+
+This shows the number of defects or nonconformities produced by a manufacturing process.
+
+
+>qcc(data, type = "c", sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+       
+       The function creates c Chart
+       
+>stats.c(data, sizes)
+   
+     The function stats.c returns a list with components statistics and center.
+     
+>sd.c(data, sizes, ...)
+
+    The function sd.c returns std.dev the standard deviation of the statistic charted.
+    
+>limits.c(center, std.dev, sizes, conf)
+
+    The function limits.c returns a matrix with lower and upper control limits.
+
+
+
+---
+
+```{r}
+qcc(orangejuice$D,type="c",size=50,xlab="sample",ylab="Nonconformings(D) per sample")
+z=stats.c(orangejuice$D , sizes = 50)
+center_c=(z$center)/54;center_c
+sd_=sd.c(z$statistics,54);sd_
+limits.c(center_c,sd_, sizes=50, conf = 3)
+
+```       
+
+
+
+---
+
+
+## u chart-->
+
+This chart shows the nonconformities/defects per unit produced by a manufacturing process.
+
+>qcc(data, type = "u", sizes, center, std.dev, limits,
+    data.name, labels, newdata, newsizes, newdata.name,
+    newlabels, nsigmas = 3, confidence.level,
+    rules = shewhart.rules, plot = TRUE, ...)
+       
+       The function creates u Chart
+       
+>stats.u(data, sizes)
+   
+     The function stats.u returns a list with components statistics and center.
+     
+>sd.u(data, sizes, ...)
+
+    The function sd.u returns std.dev the standard deviation of the statistic charted.
+    
+>limits.u(center, std.dev, sizes, conf)
+
+    The function limits.u returns a matrix with lower and upper control limits.
+
+
+
+---
+
+```{r}
+qcc(orangejuice$D,type="u",size=50,xlab="sample no.",ylab="Nonconformings(D) per unit ")
+w=stats.u(orangejuice$D , sizes = 50)
+center_u=(w$center)/54;center_u
+sd_=sd.u((50*w$statistics)/54,50);sd_
+limits.u(center_u,sd_, sizes=50, conf = 3)
+
+```       
+       
+
+
+---
+
+### References
+
+- "https://nitc.ac.in/dept/me/jagadeesha/QUALITY_ENGINEERING/MODULE_16-19.pdf"
+
+- "https://luca-scr.github.io/qcc/reference/qcc.html"
+
+- D.C.Montgomery, Introduction to Statistical Quality Control, 6th ed. 
+
+- Fundamentals of Applied Statistics,s.c.Gupta & v.k.Kapoor
+

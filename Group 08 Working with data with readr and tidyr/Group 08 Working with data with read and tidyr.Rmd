@@ -1,0 +1,186 @@
+---
+title: "Working with data with readr and tidyr"
+author: 2202 - Sakshi Kailas Badgujar , 2203 - Priyanka Dhanraj Bagul, 2243 - Pranjal
+  Ravindra Wankhede
+date: '2022-12-09'
+output: slidy_presentation
+---
+## Objective
+
+How to import data into R using package readr
+
+Create a tidy data using package tidyr
+
+
+image:![markdown](C:\Users\Chaitanya\OneDrive\Desktop\import-txt-csv-into-r-readr-package.png){width=50%}
+
+
+## Introduction to readr
+
+**readr: Read Rectangular Text Data**
+
+##### Author: Hadley Wickham
+
+* The readr package makes it easy to get rectangular data out of comma separated(csv),tab separated (tsv), or fixed width files (fwf) into R.
+* The goal of 'readr' is to provide a fast and friendly way to read rectangular data.
+* fast, easy to use and consistant.
+* The readr package is part of a larger **tidyverse core**.
+```{r}
+library(tidyverse)
+```
+
+---
+
+* The major functions of readr is to turn flat files into the data frames:
+     * read_csv() : reads comma (",") separated files
+     * read_csv2() : reads semicolon (";")separated files
+     * read_tsv() : reads tab ("\t") delimited files
+     * read_delim() : reads in files with any delimiter
+     * read_excel() : read the excel file data 
+     * read_sas() : read the SAS file data
+     * read_sav() : read the SPSS file data
+     
+---
+
+## How to import CSV file into R
+
+Here we will import csv file using read_csv() function
+
+**Syntax** : read_csv(path,header=True,sep=",")
+
+**Arguments**
+
+   path : the path of the file to be imported
+   
+   header : By default:TRUE.Indicator whether to import column headings.
+   
+   sep="," : The separator for the values in each row.
+  
+### Import data
+
+```{r}
+read_csv("C:\\Users\\Chaitanya\\OneDrive\\Desktop\\Practicals\\Heatflux.csv")
+```
+
+
+
+
+---
+
+## How to import delim file into R
+
+**Syntax** : read_delim("file_name",sep"",header=TRUE)
+
+```{r}
+read_delim("C:\\Users\\Chaitanya\\OneDrive\\Desktop\\personaldata1.txt")
+```
+
+
+## Import TSV file into R (no column names)
+
+```{r}
+read_delim("C:\\Users\\Chaitanya\\OneDrive\\Desktop\\personaldata1.txt",col_names = FALSE)
+```
+
+---
+
+## How to import Excel files into R
+
+```{r}
+library(readxl)
+```
+
+**Syntax** : read_excel(path,sheet=NULL)
+
+**Argument** 
+
+  path : Path to the xls/xlsx file
+
+  sheet : The sheet to read. This can be the name 
+of the sheet or the position of the sheet. If this is not specified, the first sheet is read.
+
+```{r}
+read_excel("C:\\Users\\Chaitanya\\OneDrive\\Desktop\\LITERACY.xlsx")
+```
+
+Note that we used double backslash (\\) in the file path to avoid the common error.
+
+---
+
+## How to Import SAS file into R
+
+we'll install the haven package in R and load the package
+
+```{r}
+library(haven)
+```
+
+For this example we'll download the SAS file called cola.sas7bdat 
+
+We'll use the read_sas() function to import the SAS file
+
+```{r}
+read_sas("C:\\Users\\Chaitanya\\Downloads\\cola.sas7bdat")
+```
+
+
+---
+
+## Introduction to tidyr
+
+* tidyr package allows you to redefine of your dataset
+* You can go from a wide format to a long format
+                   *OR*
+   You can go in the other way from long format to the wide one
+* Functions help you to go from one format to the other one
+
+image:![markdown](C:\Users\Chaitanya\OneDrive\Desktop\tidyr.png){width=50%}
+
+---
+
+```{r}
+library(tidyr)
+head(iris)
+```
+---
+
+### To get a long  format, we use gather():
+##### gather(data,key,value,...)
+
+```{r}
+gather(head(iris),key="classification",value="measurement",Sepal.Length,Sepal.Width,Petal.Length,Petal.Width)
+```
+```{r}
+table4a
+```
+```{r}
+table4a %>% gather(key="year",value="cases","1999","2000")
+```
+---
+
+### To seperate a single data frame or table column into multiple columns,we use separate():
+#### separate (data,col,into,sep)
+```{r}
+table3
+```
+
+
+```{r}
+separate(table3,col=rate,into=c("cases","population"),sep="/")
+```
+
+---
+
+### To get wide formate,we use spread():
+#### spread(data,key,value)
+
+```{r}
+table2
+```
+```{r}
+spread(table2,key=type,value=count)
+```
+
+
+
+

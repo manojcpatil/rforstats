@@ -1,0 +1,192 @@
+---
+title: <span style="color:red">"Apply function with purrr"
+
+author: "Tejas 2230, Darshan 2204, Bhushan 2218"
+
+date: "14 DEC 2022"
+
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+---
+
+#<span style="color:red">**Introduction**
+
+In this topic we talked about how important it is to reduce duplication
+in your code by creating functions instead of copying and
+pasting. Reducing code duplication has three main benefits:
+
+• It’s easier to see the intent of your code, because your eyes are
+drawn to what’s different, not what stays the same.
+
+• It’s easier to respond to changes in requirements. As your needs
+change, you only need to make changes in one place, rather
+than remembering to change every place that you copied and
+pasted the code.
+
+• You’re likely to have fewer bugs because each line of code is used
+in more places
+
+
+---
+
+Every for loop has three components:
+
+output output <- vector("double", length(x))
+Before you start the loop, you must always allocate sufficient
+space for the output. This is very important for efficiency: if you
+grow the for loop at each iteration using c() (for example), your
+for loop will be very slow.
+
+A general way of creating an empty vector of given length is the
+vector() function. It has two arguments: the type of the vector
+(“logical,” “integer,” “double,” “character,” etc.) and the length of
+the vector.
+
+sequence i in seq_along(df)
+
+This determines what to loop over: each run of the for loop will
+assign i to a different value from seq_along(df). It’s useful to
+think of i as a pronoun, like “it.”
+
+```{r,echo=TRUE}
+library(tidyverse)
+df=tibble(a=rnorm(10),b=rnorm(10),c=rnorm(10),d=rnorm(10))
+df
+med=median(df$a)
+med
+
+
+median(df$a)
+median(df$b)
+median(df$c)
+median(df$d)
+
+
+output=vector("double",ncol(df))
+for (i in seq_along(df)) {
+  output[[i]]=median(df[[i]])
+}
+output
+```
+
+---
+
+#**The Map Functions**
+
+The pattern of looping over a vector, doing something to each element,
+and saving the results is so common that the purrr package
+provides a family of functions to do it for you. There is one function
+for each type of output:
+
+• map() makes a list.
+
+• map_lgl() makes a logical vector.
+
+• map_int() makes an integer vector.
+
+• map_dbl() makes a double vector.
+
+• map_chr() makes a character vector.
+
+
+   Each function takes a vector as input, applies a function to each
+piece, and then returns a new vector that’s the same length (and has
+the same names) as the input. The type of the vector is determined
+by the suffix to the map function.
+
+```{r,echo=TRUE}
+map_dbl(df, median)
+map_dbl(df, mean)
+```
+```{r , echo=TRUE}
+library("tidyverse")
+p=c(1,2,3,4,5,6,7)
+q=c(8,9,10,3,5,6,7)
+r=c(3,9,6,4,1,8,5)
+pmap(list(p,q,r),sum)
+
+```
+
+---
+
+Compared to using a for loop, focus is on the operation being performed
+(i.e., mean(), median(), sd()), not the bookkeeping required
+to loop over every element and store the output. This is even more
+apparent if we use the pipe:
+
+```{r,echo=TRUE}
+df %>% map_dbl(mean)
+df %>% map_dbl(median)
+df %>% map_dbl(sd)
+```
+
+
+---
+
+
+#**Linear model**
+
+There are a few shortcuts that you can use with .f in order to save a
+little typing. Imagine you want to fit a linear model to each group in
+a dataset. The following toy example splits up the mtcars dataset
+into three pieces (one for each value of cylinder) and fits the same
+linear model to each piece:
+```{r,echo=TRUE}
+library(dplyr)
+df5=mtcars
+mtcars%>%map_dbl(sum)
+mtcars%>%
+  split(mtcars$hp)%>%
+  map(~lm(mpg~wt,data = df5))%>%
+  #map_dfr(~ as.data.frame(t(as.matrix(coef(.)))))
+  map(summary)
+  
+model=mtcars%>% split(mtcars$cyl)%>%map(function(df5) lm(mpg~wt,data=df5))
+model
+```
+
+
+---
+
+
+#**Base R**
+
+If you’re familiar with the apply family of functions in base R, you
+might have noticed some similarities with the purrr functions:
+
+• lapply() is basically identical to map(), except that map() is
+consistent with all the other functions in purrr, and you can use
+the shortcuts for .f.
+
+• Base sapply() is a wrapper around lapply() that automatically
+simplifies the output. This is useful for interactive work but is
+problematic in a function because you never know what sort of
+output you’ll get:
+
+```{r,echo=TRUE}
+x1 = list(
+  c(0.27, 0.37, 0.57, 0.91, 0.20),
+  c(0.90, 0.94, 0.66, 0.63, 0.06),
+  c(0.21, 0.18, 0.69, 0.38, 0.77)
+)
+x2 =list(
+  c(0.50, 0.72, 0.99, 0.38, 0.78),
+  c(0.93, 0.21, 0.65, 0.13, 0.27),
+  c(0.39, 0.01, 0.38, 0.87, 0.34))
+threshould=function(x,cutoff=0.8) x[x>cutoff]
+x1%>%sapply(threshould)%>%str()
+x2%>%sapply(threshould)%>%str()
+
+```
+
+
+---
+
+#**THANK YOU**
+  
