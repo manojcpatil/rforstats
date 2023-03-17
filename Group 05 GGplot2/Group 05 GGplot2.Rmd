@@ -11,6 +11,26 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ---
 
+```{r}
+# Load the library
+library(stats)
+
+# Define the data
+soft_drink <- c(5,10,12,4,9)
+new_registers <- c(7,10,9,4,5)
+dairy_section <- c(10,9,6,11,7)
+
+# Combine the data into a data frame
+data <- data.frame("Y"=c(soft_drink, new_registers,dairy_section),"X"=rep(c("soft_drink", "new_registers", "dairy_section"),each=5))
+
+# Run the one-way ANOVA
+result <- aov(Y~X, data)
+
+# Summarize the results
+summary(result)
+```
+
+
 ## INTRODUCTION
 
 1) ggplot2 is an R package which is designed especially for data visualization and providing best exploratory data analysis.
